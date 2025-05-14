@@ -14,10 +14,14 @@ const ContactsPage = () => {
   const contacts = useSelector(selectFilteredContacts);
   const isLoading = useSelector(selectIsLoading);
   const error = useSelector(selectError);
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const isRefreshing = useSelector((state) => state.auth.isRefreshing);
 
   useEffect(() => {
-    dispatch(fetchContacts());
-  }, [dispatch]);
+    if (isLoggedIn && !isRefreshing) {
+      dispatch(fetchContacts());
+    }
+  }, [dispatch, isLoggedIn, isRefreshing]);
 
   return (
     <div className={css.wrapper}>
@@ -30,7 +34,7 @@ const ContactsPage = () => {
       <ul>
         {contacts.map((contact) => (
           <li key={contact.id}>
-            {contact.name} - {contact.email}
+            {contact.name} - {contact.number}
           </li>
         ))}
       </ul>

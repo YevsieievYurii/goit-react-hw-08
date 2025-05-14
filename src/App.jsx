@@ -1,30 +1,57 @@
+import { Routes, Route } from "react-router-dom";
+import Layout from "./components/Layout/Layout";
+
+import HomePage from "./pages/HomePage/HomePage";
+import LoginPage from "./pages/LoginPage/LoginPage";
+import RegistrationPage from "./pages/RegistrationPage/RegistrationPage";
+import ContactsPage from "./pages/ContactsPage/ContactsPage";
+
+import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
+import RestrictedRoute from "./components/RestrictedRoute/RestrictedRoute";
+
+import { useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import "./App.css";
-import ContactForm from "./components/ContactForm/ContactForm";
-import ContactList from "./components/ContactList/ContactList";
-import SearchBox from "./components/SearchBox/SearchBox";
-import { fetchContacts } from "./redux/contacts/operations";
-import { selectError, selectLoading } from "./redux/contacts/selectors";
+import { refreshUser } from "./redux/auth/operations";
 
 const App = () => {
   const dispatch = useDispatch();
-  const isLoading = useSelector(selectLoading);
-  const error = useSelector(selectError);
 
+  // Обновляем сессию при старте
   useEffect(() => {
-    dispatch(fetchContacts());
+    dispatch(refreshUser());
   }, [dispatch]);
 
   return (
-    <div className="appContainer">
-      <h1>Phonebook</h1>
-      <ContactForm />
-      <SearchBox />
-      {isLoading && <p>Loading contacts...</p>}
-      {error && <p style={{ color: "red" }}>Error: {error}</p>}
-      <ContactList />
-    </div>
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<HomePage />} />
+        <Route
+          path="/register"
+          element={
+            <RestrictedRoute>
+              <RegistrationPage />
+            </RestrictedRoute>
+          }
+        />
+        <Route
+          path="/login"
+          element={
+            <RestrictedRoute>
+              <LoginPage />
+            </RestrictedRoute>
+          }
+        />
+        <Route
+          path="/contacts"
+          element={
+            <PrivateRoute>
+              <ContactsPage />
+            </PrivateRoute>
+          }
+        />
+        <Route path="*" element={<HomePage />} />
+      </Route>
+    </Routes>
   );
 };
 

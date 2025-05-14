@@ -1,13 +1,12 @@
 import css from "./HomePage.module.css";
-import { LoginForm } from "../../components/LoginForm/LoginForm";
 
-const LoginPage = () => {
+const HomePage = () => {
   return (
     <div className={css.wrapper}>
-      <h2>Login</h2>
-      <LoginForm />
+      <h2>Welcome to Contact Book</h2>
+      <p>Please register or log in to manage your contacts.</p>
     </div>
   );
 };
 
-export default LoginPage;
+export default HomePage;

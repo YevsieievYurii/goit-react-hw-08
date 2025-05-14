@@ -1,5 +1,3 @@
-// src/redux/contacts/selectors.js
-
 import { createSelector } from "@reduxjs/toolkit";
 import { selectNameFilter } from "../filters/selectors";
 
