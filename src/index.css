@@ -1,0 +1,32 @@
+:root {
+  --font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --base-line-height: 1.5;
+  --base-font-weight: 400;
+  --primary-text-color: #d3cbcbde;
+  --background-color-light: #f9f9f9;
+  --background-color-dark: #2c2b2b;
+
+  --button-hover-color: #0056b3;
+  --button-bg-color: #238bfa;
+
+  color-scheme: light dark;
+  font-family: var(--font-family);
+  line-height: var(--base-line-height);
+  font-weight: var(--base-font-weight);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: var(--background-color-light);
+  color: #2c2b2b;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: var(--background-color-dark);
+    color: var(--primary-text-color);
+  }
+}
