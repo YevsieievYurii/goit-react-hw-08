@@ -15,8 +15,6 @@ export const fetchContacts = createAsyncThunk(
   }
 );
 
-// ===================
-
 export const updateContact = createAsyncThunk(
   "contacts/updateContact",
   async ({ id, updatedData }, thunkAPI) => {
@@ -28,7 +26,6 @@ export const updateContact = createAsyncThunk(
     }
   }
 );
-// ====================
 
 export const addContact = createAsyncThunk(
   "contacts/addContact",
