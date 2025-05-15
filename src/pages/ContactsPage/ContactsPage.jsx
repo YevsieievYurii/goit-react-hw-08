@@ -1,44 +1,71 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchContacts } from "../../redux/contacts/operations";
+
 import {
   selectFilteredContacts,
   selectIsLoading,
   selectError,
 } from "../../redux/contacts/selectors";
-import css from "./ContactsPage.module.css";
+
+import {
+  selectIsLoggedIn,
+  selectIsRefreshing,
+} from "../../redux/auth/selectors";
+
+import ContactForm from "../../components/ContactForm/ContactForm";
+import ContactList from "../../components/ContactList/ContactList";
 import SearchBox from "../../components/SearchBox/SearchBox";
+
+import {
+  Container,
+  Typography,
+  Box,
+  CircularProgress,
+  Alert,
+} from "@mui/material";
 
 const ContactsPage = () => {
   const dispatch = useDispatch();
+
   const contacts = useSelector(selectFilteredContacts);
   const isLoading = useSelector(selectIsLoading);
   const error = useSelector(selectError);
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-  const isRefreshing = useSelector((state) => state.auth.isRefreshing);
+
+  const isLoggedIn = useSelector(selectIsLoggedIn);
+  const isRefreshing = useSelector(selectIsRefreshing);
 
   useEffect(() => {
-    if (isLoggedIn && !isRefreshing) {
+    if (!isRefreshing && isLoggedIn) {
       dispatch(fetchContacts());
     }
-  }, [dispatch, isLoggedIn, isRefreshing]);
+  }, [dispatch, isRefreshing, isLoggedIn]);
 
   return (
-    <div className={css.wrapper}>
-      <h2>Your Contacts</h2>
-      <SearchBox />
+    <Container maxWidth="md">
+      <Typography variant="h4" gutterBottom>
+        Your Contacts
+      </Typography>
 
-      {isLoading && <p>Loading contacts...</p>}
-      {error && <p className={css.error}>Error: {error}</p>}
+      <Box mb={3}>
+        <SearchBox />
+        <ContactForm />
+      </Box>
 
-      <ul>
-        {contacts.map((contact) => (
-          <li key={contact.id}>
-            {contact.name} - {contact.number}
-          </li>
-        ))}
-      </ul>
-    </div>
+      {isLoading && (
+        <Box display="flex" justifyContent="center" mb={2}>
+          <CircularProgress />
+        </Box>
+      )}
+
+      {error && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {error}
+        </Alert>
+      )}
+
+      <ContactList />
+    </Container>
   );
 };
 

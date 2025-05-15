@@ -1,10 +1,13 @@
+import { Container, Box } from "@mui/material";
 import LoginForm from "../../components/LoginForm/LoginForm";
 
 const LoginPage = () => {
   return (
-    <div>
-      <LoginForm />
-    </div>
+    <Container maxWidth="sm">
+      <Box py={6}>
+        <LoginForm />
+      </Box>
+    </Container>
   );
 };
 

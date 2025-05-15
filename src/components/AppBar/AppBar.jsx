@@ -2,17 +2,31 @@ import Navigation from "../Navigation/Navigation";
 import AuthNav from "../AuthNav/AuthNav";
 import UserMenu from "../UserMenu/UserMenu";
 import { useSelector } from "react-redux";
-import css from "./AppBar.module.css";
 
-const AppBar = () => {
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import Container from "@mui/material/Container";
+import Box from "@mui/material/Box";
+
+const CustomAppBar = () => {
   const { isLoggedIn } = useSelector((state) => state.auth);
 
   return (
-    <header className={css.header}>
-      <Navigation />
-      {isLoggedIn ? <UserMenu /> : <AuthNav />}
-    </header>
+    <AppBar position="static" color="primary">
+      <Container maxWidth="lg">
+        <Toolbar
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            paddingY: 1,
+          }}
+        >
+          <Navigation />
+          <Box>{isLoggedIn ? <UserMenu /> : <AuthNav />}</Box>
+        </Toolbar>
+      </Container>
+    </AppBar>
   );
 };
 
-export default AppBar;
+export default CustomAppBar;

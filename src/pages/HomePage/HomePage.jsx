@@ -1,11 +1,17 @@
-import css from "./HomePage.module.css";
+import { Container, Typography, Box } from "@mui/material";
 
 const HomePage = () => {
   return (
-    <div className={css.wrapper}>
-      <h2>Welcome to Contact Book</h2>
-      <p>Please register or log in to manage your contacts.</p>
-    </div>
+    <Container maxWidth="md">
+      <Box textAlign="center" py={6}>
+        <Typography variant="h3" gutterBottom>
+          Welcome to Contact Book
+        </Typography>
+        <Typography variant="h6">
+          Please register or log in to manage your contacts.
+        </Typography>
+      </Box>
+    </Container>
   );
 };
 

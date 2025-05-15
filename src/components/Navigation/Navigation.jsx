@@ -1,21 +1,21 @@
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import css from "./Navigation.module.css";
+import { Button, Stack } from "@mui/material";
 
 const Navigation = () => {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
   return (
-    <nav className={css.nav}>
-      <Link to="/" className={css.link}>
+    <Stack direction="row" spacing={2}>
+      <Button component={Link} to="/" color="inherit">
         Home
-      </Link>
+      </Button>
       {isLoggedIn && (
-        <Link to="/contacts" className={css.link}>
+        <Button component={Link} to="/contacts" color="inherit">
           Contacts
-        </Link>
+        </Button>
       )}
-    </nav>
+    </Stack>
   );
 };
 

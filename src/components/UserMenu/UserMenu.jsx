@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../redux/auth/operations";
-import css from "./UserMenu.module.css";
+import { Button, Stack, Typography } from "@mui/material";
 
 const UserMenu = () => {
   const dispatch = useDispatch();
@@ -9,12 +9,12 @@ const UserMenu = () => {
   const handleLogout = () => dispatch(logout());
 
   return (
-    <div className={css.menu}>
-      <span>Welcome, {userName}!</span>
-      <button className={css.button} onClick={handleLogout}>
+    <Stack direction="row" spacing={2} alignItems="center">
+      <Typography variant="body1">Welcome, {userName}!</Typography>
+      <Button variant="outlined" color="inherit" onClick={handleLogout}>
         Logout
-      </button>
-    </div>
+      </Button>
+    </Stack>
   );
 };
 

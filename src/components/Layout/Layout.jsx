@@ -1,15 +1,20 @@
 import AppBar from "../AppBar/AppBar";
 import { Outlet } from "react-router-dom";
-import css from "./Layout.module.css";
+import { Toaster } from "react-hot-toast";
+
+import { Container, Box } from "@mui/material";
 
 const Layout = () => {
   return (
-    <div className={css.container}>
+    <>
       <AppBar />
-      <main className={css.main}>
-        <Outlet />
-      </main>
-    </div>
+      <Toaster position="top-right" reverseOrder={false} />
+      <Container maxWidth="md">
+        <Box component="main" py={4}>
+          <Outlet />
+        </Box>
+      </Container>
+    </>
   );
 };
 

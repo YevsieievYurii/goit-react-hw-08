@@ -1,13 +1,16 @@
+import { Container, Box, Typography } from "@mui/material";
 import RegistrationForm from "../../components/RegistrationForm/RegistrationForm";
-
-import css from "./RegistrationPage.module.css";
 
 const RegistrationPage = () => {
   return (
-    <div className={css.wrapper}>
-      <h2>Register</h2>
-      <RegistrationForm />
-    </div>
+    <Container maxWidth="sm">
+      <Box py={6}>
+        <Typography variant="h4" textAlign="center" gutterBottom>
+          Register
+        </Typography>
+        <RegistrationForm />
+      </Box>
+    </Container>
   );
 };
 

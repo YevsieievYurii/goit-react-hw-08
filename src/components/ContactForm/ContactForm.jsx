@@ -1,8 +1,10 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useDispatch } from "react-redux";
 import * as Yup from "yup";
-import styles from "./ContactForm.module.css";
 import { addContact } from "../../redux/contacts/operations";
+import toast from "react-hot-toast";
+
+import { TextField, Button, Box, Stack, Typography } from "@mui/material";
 
 const validationSchema = Yup.object({
   name: Yup.string()
@@ -31,46 +33,46 @@ const ContactForm = () => {
         dispatch(addContact(values))
           .unwrap()
           .then(() => {
+            toast.success("Contact added successfully!");
             resetForm();
           })
           .catch((error) => {
             console.error("Error adding contact: ", error);
+            toast.error("Failed to add contact");
           });
       }}
     >
-      <Form className={styles.contactForm}>
-        <div className={styles.fieldContainer}>
-          <label htmlFor="name">Name</label>
-          <Field
-            className={styles.field}
-            type="text"
-            name="name"
-            id="name"
-            placeholder="Enter name"
-          />
-          <ErrorMessage name="name" component="div" className={styles.error} />
-        </div>
+      {({ errors, touched }) => (
+        <Form>
+          <Stack spacing={2} maxWidth={400} marginBottom={3}>
+            <Typography variant="h6">Add New Contact</Typography>
 
-        <div className={styles.fieldContainer}>
-          <label htmlFor="number">Phone number</label>
-          <Field
-            className={styles.field}
-            type="text"
-            name="number"
-            id="number"
-            placeholder="Enter phone number"
-          />
-          <ErrorMessage
-            name="number"
-            component="div"
-            className={styles.error}
-          />
-        </div>
+            <Field
+              name="name"
+              as={TextField}
+              label="Name"
+              variant="outlined"
+              error={touched.name && Boolean(errors.name)}
+              helperText={<ErrorMessage name="name" />}
+            />
 
-        <button className={styles.btn} type="submit">
-          Add contact
-        </button>
-      </Form>
+            <Field
+              name="number"
+              as={TextField}
+              label="Phone number"
+              variant="outlined"
+              error={touched.number && Boolean(errors.number)}
+              helperText={<ErrorMessage name="number" />}
+            />
+
+            <Box textAlign="right">
+              <Button type="submit" variant="contained" color="primary">
+                Add Contact
+              </Button>
+            </Box>
+          </Stack>
+        </Form>
+      )}
     </Formik>
   );
 };

@@ -1,8 +1,17 @@
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { register } from "../../redux/auth/operations";
-import css from "./RegistrationForm.module.css";
+
+import {
+  TextField,
+  Button,
+  Stack,
+  Typography,
+  Box,
+  Alert,
+} from "@mui/material";
 
 const validationSchema = Yup.object({
   name: Yup.string().min(2, "Too short").required("Required"),
@@ -12,6 +21,7 @@ const validationSchema = Yup.object({
 
 const RegistrationForm = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const error = useSelector((state) => state.auth.error);
 
   const handleSubmit = async (values, { resetForm }) => {
@@ -19,6 +29,7 @@ const RegistrationForm = () => {
       const resultAction = await dispatch(register(values));
       if (register.fulfilled.match(resultAction)) {
         resetForm();
+        navigate("/contacts");
       } else {
         console.error("Registration failed:", resultAction.payload);
       }
@@ -33,31 +44,56 @@ const RegistrationForm = () => {
       validationSchema={validationSchema}
       onSubmit={handleSubmit}
     >
-      <Form className={css.form}>
-        <label className={css.label}>
-          Name
-          <Field className={css.input} type="text" name="name" />
-          <ErrorMessage name="name" component="div" className={css.error} />
-        </label>
+      {({ errors, touched }) => (
+        <Form>
+          <Stack spacing={3} maxWidth={400} mx="auto">
+            <Typography variant="h5" textAlign="center">
+              Register
+            </Typography>
 
-        <label className={css.label}>
-          Email
-          <Field className={css.input} type="email" name="email" />
-          <ErrorMessage name="email" component="div" className={css.error} />
-        </label>
+            <Field
+              name="name"
+              as={TextField}
+              label="Name"
+              fullWidth
+              error={touched.name && Boolean(errors.name)}
+              helperText={<ErrorMessage name="name" />}
+            />
 
-        <label className={css.label}>
-          Password
-          <Field className={css.input} type="password" name="password" />
-          <ErrorMessage name="password" component="div" className={css.error} />
-        </label>
+            <Field
+              name="email"
+              as={TextField}
+              label="Email"
+              type="email"
+              fullWidth
+              error={touched.email && Boolean(errors.email)}
+              helperText={<ErrorMessage name="email" />}
+            />
 
-        <button className={css.button} type="submit">
-          Register
-        </button>
+            <Field
+              name="password"
+              as={TextField}
+              label="Password"
+              type="password"
+              fullWidth
+              error={touched.password && Boolean(errors.password)}
+              helperText={<ErrorMessage name="password" />}
+            />
 
-        {error && <div className={css.error}>Error: {error}</div>}
-      </Form>
+            {error && (
+              <Alert severity="error" variant="outlined">
+                {error}
+              </Alert>
+            )}
+
+            <Box textAlign="right">
+              <Button variant="contained" color="primary" type="submit">
+                Register
+              </Button>
+            </Box>
+          </Stack>
+        </Form>
+      )}
     </Formik>
   );
 };
