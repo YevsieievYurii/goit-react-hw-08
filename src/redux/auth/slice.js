@@ -31,6 +31,10 @@ const authSlice = createSlice({
         state.isLoggedIn = true;
         state.error = null;
       })
+      .addCase(login.rejected, (state, action) => {
+        state.error = action.payload || "Login failed";
+      })
+
       .addCase(logout.fulfilled, (state) => {
         state.user = { name: null, email: null };
         state.token = null;

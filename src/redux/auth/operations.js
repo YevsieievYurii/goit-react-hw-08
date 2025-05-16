@@ -16,7 +16,9 @@ export const register = createAsyncThunk(
   async (userData, thunkAPI) => {
     try {
       const response = await axios.post(`${API_URL}users/signup`, userData);
-      setAuthHeader(response.data.token);
+      const { token } = response.data;
+      setAuthHeader(token);
+      localStorage.setItem("token", token); // ✅ сохраняем токен
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
@@ -29,7 +31,9 @@ export const login = createAsyncThunk(
   async (userData, thunkAPI) => {
     try {
       const response = await axios.post(`${API_URL}users/login`, userData);
-      setAuthHeader(response.data.token);
+      const { token } = response.data;
+      setAuthHeader(token);
+      localStorage.setItem("token", token); // ✅ сохраняем токен
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
@@ -41,6 +45,7 @@ export const logout = createAsyncThunk("auth/logout", async (_, thunkAPI) => {
   try {
     await axios.post(`${API_URL}users/logout`);
     clearAuthHeader();
+    localStorage.removeItem("token");
   } catch (error) {
     return thunkAPI.rejectWithValue(error.message);
   }
@@ -50,14 +55,22 @@ export const refreshUser = createAsyncThunk(
   "auth/refresh",
   async (_, thunkAPI) => {
     const state = thunkAPI.getState();
-    const token = state.auth.token;
+    let token = state.auth.token;
 
-    if (!token) return thunkAPI.rejectWithValue("No token");
+    if (!token) {
+      token = localStorage.getItem("token");
+      if (token) {
+        setAuthHeader(token);
+      } else {
+        return thunkAPI.rejectWithValue("No token found");
+      }
+    } else {
+      setAuthHeader(token);
+    }
 
     try {
-      setAuthHeader(token);
-      const res = await axios.get(`${API_URL}users/current`);
-      return res.data;
+      const response = await axios.get(`${API_URL}users/current`);
+      return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }
